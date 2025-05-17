@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SchedEase</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #1a73e8;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-weight: 500;
+    }
+
+    input[type="time"], input[type="text"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #1a73e8;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #155ab6;
+    }
+
+    #task-list > div {
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      background: #e3f2fd;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        margin: 20px;
+      }
+
+      input, button {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Task Arranger</h1>
+
+    <form action="/schedule" method="POST">
+      <label>Start Time:
+        <input type="time" name="start_time" required>
+      </label>
+
+      <label>End Time:
+        <input type="time" name="end_time" required>
+      </label>
+
+      <div id="task-list">
+        <div>
+          <label>Task 1:
+            <input type="text" name="task" required>
+          </label>
+        </div>
+      </div>
+
+      <button type="button" onclick="addTask()">+ Add Task</button>
+      <button type="submit">Generate Schedule</button>
+    </form>
+
+    {% if schedule %}
+      <h2>Generated Schedule:</h2>
+      <ul>
+        {% for time, task in schedule.items() %}
+          <li><strong>{{ time }}:</strong> {{ task }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+  <script>
+    let taskCount = 1;
+    function addTask() {
+      taskCount++;
+      const taskList = document.getElementById("task-list");
+      const newTask = document.createElement("div");
+      newTask.innerHTML = `
+        <label>Task ${taskCount}:
+          <input type="text" name="task" required>
+        </label>`;
+      taskList.appendChild(newTask);
+    }
+  </script>
+</body>
+</html>
